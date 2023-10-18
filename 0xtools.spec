@@ -1,8 +1,8 @@
 %define  debug_package %{nil}
 # %define _unpackaged_files_terminate_build 0
 
-%define ReleaseNumber 5
-%define VERSION 1.2.3
+%define ReleaseNumber 6
+%define VERSION v1.2.5
 
 Name:           0xtools
 Version:        %{VERSION}
@@ -26,7 +26,7 @@ BuildArch:      %{_arch}
 #
 # Download 0xtools source archive into SOURCES:
 # spectool -g -R 0xtools.spec
-# 
+#
 # Build package:
 # rpmbuild -bb 0xtools.spec
 
@@ -47,7 +47,6 @@ currently executing system calls and kernel wait locations.
 
 %build
 make PREFIX=%{buildroot}/usr
-make install PREFIX=%{buildroot}/usr
 
 %install
 install -m 0755 -d -p %{buildroot}/usr/bin
@@ -56,6 +55,8 @@ install -m 0755 -d -p %{buildroot}/usr/lib/%{name}
 install -m 0755 -d -p %{buildroot}/usr/share/%{name}
 install -m 0755 -d -p %{buildroot}/var/log/xcapture
 
+make install PREFIX=%{buildroot}/usr
+install -m 0755 bin/xcapture.bt %{buildroot}/usr/bin/xcapture.bt
 install -m 0755 bin/run_xcpu.sh %{buildroot}/usr/bin/run_xcpu.sh
 install -m 0755 bin/run_xcapture.sh %{buildroot}/usr/bin/run_xcapture.sh
 install -m 0755 bin/schedlat %{buildroot}/usr/bin/schedlat
@@ -99,6 +100,7 @@ fi
 %{_bindir}/run_xcpu.sh
 %{_bindir}/schedlat
 %{_bindir}/xcapture
+%{_bindir}/xcapture.bt
 %{_bindir}/vmtop
 /usr/lib/0xtools/*
 /usr/lib/systemd/system/xcapture.service
@@ -107,9 +109,8 @@ fi
 
 %defattr(0644,root,root,0755)
 /usr/share/%{name}
-%ghost /usr/lib/%{name}/*.pyc
-%ghost /usr/lib/%{name}/*.pyo
+#%ghost /usr/lib/%{name}/*.pyc
+#%ghost /usr/lib/%{name}/*.pyo
 
 %config(noreplace) /etc/default/xcapture
 %dir /var/log/xcapture/
-
